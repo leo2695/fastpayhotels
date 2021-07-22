@@ -1,18 +1,30 @@
 const { response, request } = require('express');
+const Catalogo = require('../models/catalogo');
 
-const catalogoGet = (request = request, response = response) => {
+const catalogoGet = async (request = request, response = response) => {
 
-    const{q, nombre, token}=request.query;
+    const catalogos= await Catalogo.findAll();
     //response.send('GET Controller');
-    response.json({
-        msg:'get API Controlador',
-        q,
-        nombre,
-        token
-    });
+    response.json({catalogos});
 }
-const catalogoPost = (request, response = response) => {
-    response.send('POST Controller');
+
+const catalogoPost = async (request = request, response = response) => {
+
+    const { body }=request;
+
+    try {
+        const catalogo= await new Catalogo(body);
+        await catalogo.save();
+
+        response.json(catalogo);
+
+    } catch (error) {
+        console.log(error);
+        response.status(500).json({
+            msg: 'Hable con el desarrollador backend'
+        })
+    }
+
 }
 const catalogoPut = (request, response = response) => {
     response.send('PUT Controller');
