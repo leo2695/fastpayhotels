@@ -19,7 +19,7 @@ const main = async () => {
     //console.log(token);
 
     //guardar token BD
-    /* try {
+    try {
          const login= await new Login(token);
          await login.save();
 
@@ -28,7 +28,7 @@ const main = async () => {
      } catch (error) {
          console.log(error);
 
-     }*/
+     }
 
     //////////////
 
@@ -39,10 +39,23 @@ const main = async () => {
 
     //insertar en BD
     try {
-        const catalogoServicio = await Catalogo.bulkCreate(catalogo.serviceTypes);
+        const catalogoserviceTypes = await Catalogo.bulkCreate(catalogo.serviceTypes);
+        const catalogoimageTypes = await Catalogo.bulkCreate(catalogo.imageTypes);
+        const catalogohotelCategoryTypes = await Catalogo.bulkCreate(catalogo.hotelCategoryTypes);
+        const catalogohotelTypes = await Catalogo.bulkCreate(catalogo.hotelTypes);
+        const catalogoserviceCategoryTypes = await Catalogo.bulkCreate(catalogo.serviceCategoryTypes);
+        const catalogomealPlanTypes = await Catalogo.bulkCreate(catalogo.mealPlanTypes);
+        const catalogobedTypes = await Catalogo.bulkCreate(catalogo.bedTypes);
+        const catalogohostSegment = await Catalogo.bulkCreate(catalogo.hostSegment);
+        const catalogocountries = await Catalogo.bulkCreate(catalogo.countries);
+        const catalogotags = await Catalogo.bulkCreate(catalogo.tags);
+        const catalogoroomTypes = await Catalogo.bulkCreate(catalogo.roomTypes);
+        const catalogoserviceGroups = await Catalogo.bulkCreate(catalogo.serviceGroups);
+        const catalogoturisticAreas = await Catalogo.bulkCreate(catalogo.turisticAreas);
+            
         //await catalogoServicio.save();
 
-        console.log(catalogoServicio.length);
+        console.log(catalogoturisticAreas.length);
 
     } catch (error) {
         console.log(error);
