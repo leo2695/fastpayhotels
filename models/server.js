@@ -1,5 +1,6 @@
 const express = require('express');
 const cors = require('cors');
+const db = require('../db/connection');
 
 class Server {
 
@@ -12,7 +13,7 @@ class Server {
         //Middlewares
         this.middlewares();
 
-        //this.dbConnection();
+        this.dbConnection();
         this.routes();
     }
 
