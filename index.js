@@ -70,18 +70,18 @@ const main = async () => {
     //Detalle Hotel
     await Promise.each(listaHoteles, async element => {
         const listaCodes = element.code;
-        const detalle= await busquedas.obtenerDetalleHotel('', '', listaCodes);
+        const detalle= await busquedas.obtenerDetalleHotel('', '', 'HUS-94C79C86+W9-E00');
         //console.log(detalle);
 
         //guardar en BD
-        try {
+        /*try {
               const hotel_list = await new Hotel_List(detalle);
               await hotel_list.save();
 
           } catch (error) {
 
               console.log(error);
-          }
+          }*/
        
         return;
     });

@@ -414,25 +414,27 @@ class Busquedas {
             });
 
             const respuesta = await instancia;
-            //console.log(respuesta.data.hotelDetail.name);
-            const hotelName = respuesta.data.hotelDetail.name;
-            const hotelType = (respuesta.data.hotelDetail.hotelType['code']) ? (respuesta.data.hotelDetail.hotelType['code']) : 'N/A';
-            const hotelCategory = (respuesta.data.hotelDetail.hotelCategory['code']) ? (respuesta.data.hotelDetail.hotelCategory['code']) : 'N/A';
-            const zone = (respuesta.data.hotelDetail.zone['code']) ? (respuesta.data.hotelDetail.zone['code']) : 'N/A';
-            const plusCode = (respuesta.data.hotelDetail.location['pluscode']) ? (respuesta.data.hotelDetail.location['pluscode']) : 'N/A';
-            const lat = (respuesta.data.hotelDetail.location['lat']) ? (respuesta.data.hotelDetail.location['lat']) : 'N/A';
-            const long = (respuesta.data.hotelDetail.location['long']) ? (respuesta.data.hotelDetail.location['long']) : 'N/A';
-            const address = (respuesta.data.hotelDetail.location['address']) ? (respuesta.data.hotelDetail.location['address']) : 'N/A';
-            const ubicacion_eng = (respuesta.data.hotelDetail.location['city']) ? (respuesta.data.hotelDetail.location['city'] + ', ' + respuesta.data.hotelDetail.location['country']) : 'N/A';
-            const checkin = (respuesta.data.hotelDetail.checkinHour) ? (respuesta.data.hotelDetail.checkinHour) : '00:00';
-            const checkout = (respuesta.data.hotelDetail.checkoutHour) ? (respuesta.data.hotelDetail.checkoutHour) : '00:00';
-            const descriptions_short = (respuesta.data.hotelDetail.descriptions[0].content) ? (respuesta.data.hotelDetail.descriptions[0].content) : 'N/A';
-            const descriptions_long = (respuesta.data.hotelDetail.descriptions[1].content) ? (respuesta.data.hotelDetail.descriptions[1].content) : 'N/A';
-            const response = (respuesta.data.messageID) ? (respuesta.data.messageID) : 'N/A';
+            //
+            const detallesHotel= (respuesta.data.hotelDetail===null ) ? '' : respuesta.data.hotelDetail;
+            console.log(detallesHotel);
+            const hotelName = (!detallesHotel.name || detallesHotel.name===undefined) ? 'S/D' : detallesHotel.name;
+            const hotelType = (!detallesHotel.hotelType || !detallesHotel.hotelType['code'] || detallesHotel.hotelType['code']===undefined) ? 'S/D' : (detallesHotel.hotelType['code']);
+            const hotelCategory = (!detallesHotel.hotelCategory || !detallesHotel.hotelCategory['code'] || detallesHotel.hotelCategory['code']===undefined) ? 'S/D' : (detallesHotel.hotelCategory['code']);
+            const zone = (!detallesHotel.zone || !detallesHotel.zone['code'] || detallesHotel.zone['code']===undefined) ? 'S/D' : (detallesHotel.zone['code']);
+            const plusCode = (!detallesHotel.location || !detallesHotel.location['pluscode'] || detallesHotel.location['pluscode']===undefined) ? 'S/D' : (detallesHotel.location['pluscode']);
+            const lat = (!detallesHotel.location || !detallesHotel.location['lat'] || detallesHotel.location['lat']===undefined) ? 'S/D' : (detallesHotel.location['lat']);
+            const long = (!detallesHotel.location || !detallesHotel.location['long'] || detallesHotel.location['long']===undefined) ? 'S/D' : (detallesHotel.location['long']);
+            const address = (!detallesHotel.location || !detallesHotel.location['address'] || detallesHotel.location['address']===undefined) ? 'S/D' : (detallesHotel.location['address']);
+            const ubicacion_eng = (!detallesHotel.location || !detallesHotel.location['city'] || detallesHotel.location['city']===undefined) ? 'S/D' : (detallesHotel.location['city'] + ', ' + detallesHotel.location['country']);
+            const checkin = (!detallesHotel.checkinHour || detallesHotel.checkinHour===undefined) ? 'S/D' : (detallesHotel.checkinHour);
+            const checkout = (!detallesHotel.checkoutHour || detallesHotel.checkoutHour===undefined) ? 'S/D' : (detallesHotel.checkoutHour);
+            const descriptions_short = (!detallesHotel.descriptions || !detallesHotel.descriptions[0].content || detallesHotel.descriptions[0].content===undefined) ? 'S/D' : (detallesHotel.descriptions[0].content);
+            const descriptions_long = (!detallesHotel.descriptions || !detallesHotel.descriptions[1].content || detallesHotel.descriptions[1].content===undefined) ? 'S/D' : (detallesHotel.descriptions[1].content);
+            const response = (!respuesta.data.messageID) ? 'S/D' : (respuesta.data.messageID);
             //console.log(ubicacion_eng);
-            let hostSegments = (!respuesta.data.hotelDetail.hostSegments || respuesta.data.hotelDetail.hostSegments === null) ? [] : respuesta.data.hotelDetail.hostSegments;
-            let mealPlans = (!respuesta.data.hotelDetail.mealPlans || respuesta.data.hotelDetail.mealPlans === null) ? [] : respuesta.data.hotelDetail.mealPlans;
-            let services = (!respuesta.data.hotelDetail.services || respuesta.data.hotelDetail.services === null) ? [] : respuesta.data.hotelDetail.services;
+            let hostSegments = (!detallesHotel.hostSegments || detallesHotel.hostSegments === null || detallesHotel.hostSegments === undefined) ? [] : detallesHotel.hostSegments;
+            let mealPlans = (!detallesHotel.mealPlans || detallesHotel.mealPlans === null || detallesHotel.mealPlans === undefined) ? [] : detallesHotel.mealPlans;
+            let services = (!detallesHotel.services || detallesHotel.services === null || detallesHotel.services === undefined) ? [] : detallesHotel.services;
 
             hostSegments = hostSegments.map(element => {
                 const codeHS = element.code; //string
@@ -481,26 +483,26 @@ class Busquedas {
                 checkoutHour: checkout
             }
 
-            return objetoDetalles;
+            //return objetoDetalles;
 
         } catch (error) {
             console.log(`error al obtener los detalles del hotel ${codeFPH} por ${error}`);
         }
     }
 
-    /*async obtenerImageHotel(access_token, token_type, code) {
+    async obtenerImageHotel(access_token, token_type, code) {
 
-        const codeFPH= code;
+        const codeFPH = code;
         //let numberRandom= Math.random();
         const data = JSON.stringify({
             'messageID': `Vamosdeviajetest-${this.numberRandom}`,
-            'code' : code
+            'code': code
         });
 
         try {
             //peticion http
             const instancia = axios({
-                timeout: 30000,
+                //timeout: 100000,
                 method: 'post',
                 baseURL: 'https://catalogue.fastpayhotels.net/api/hotel/details',
                 headers: {
@@ -514,20 +516,51 @@ class Busquedas {
 
             const respuesta = await instancia;
 
-            return respuesta.data.hotelDetail.images.map(element =>({
-                code : element.type['code'],
-                name : element.name,
-                url : element.url,
-                codeHotel : codeFPH
-            }));
+            let images = (!respuesta.data.hotelDetail.images || respuesta.data.hotelDetail.images === null) ? [] : respuesta.data.hotelDetail.images;
+         
+            images = images.map(element => {
+                const codeServices = (element.code === '' || element.code === undefined) ? element.name : element.code;
+                return codeServices
+            });
+            //console.log(images);
+
+
+            /*
+            const rooms=respuesta.data.hotelDetail.rooms.map(element =>{
+                const codeRooms=element.code;
+                const roomsServices=element.services;
+
+                //console.log(roomsServices);
+        
+                //console.log(codeRooms);
+            });*/
+
+            const objetoDetalles = await {
+                code: codeFPH,
+                name: hotelName,
+                hotelType,
+                hotelCategory,
+                zone,
+                plusCode,
+                ubicacion_eng,
+                latitud: lat,
+                longitud: long,
+                direccion: address,
+                hostSegments: hostSegments.join(', '), //une todos los elementos del array con comas
+                mealPlans: mealPlans.join(', '),
+                services: services.join(', '),
+                descriptions_short,
+                descriptions_long,
+                checkinHour: checkin,
+                checkoutHour: checkout
+            }
+
+            return objetoDetalles;
 
         } catch (error) {
-            console.log(`error al obtener los detalles del hotel ${codeFPH}`);
+            console.log(`error al obtener los detalles del hotel ${codeFPH} por ${error}`);
         }
-
-
-
-    }*/
+    }
 }
 
 module.exports = Busquedas;
