@@ -64,30 +64,28 @@ const main = async () => {
     ////////////
 
 
-    ////Lista Hoteles
+    ///////LISTA HOTELES///////
     const listaHoteles = await busquedas.obtenerListaHoteles('', '', fechaActual);
 
-    //Detalle Hotel
+    //Detalle Hotel//
     await Promise.each(listaHoteles, async element => {
         const listaCodes = element.code;
-        const detalle= await busquedas.obtenerDetalleHotel('', '', 'HUS-94C79C86+W9-E00');
+        const detalle = await busquedas.obtenerDetalleHotel('', '', listaCodes);
         //console.log(detalle);
 
         //guardar en BD
-        /*try {
-              const hotel_list = await new Hotel_List(detalle);
-              await hotel_list.save();
+        try {
+            const hotel_list = await new Hotel_List(detalle);
+            await hotel_list.save();
 
-          } catch (error) {
+        } catch (error) {
 
-              console.log(error);
-          }*/
-       
+            console.log(error);
+        }
+
         return;
     });
-
-    //const imagesHotel= await busquedas.obtenerImageHotel('','','HDE-9F4MCGW7+JX-E00');
-    //console.log(imagesHotel);
+    //////////////
 }
 
 main();

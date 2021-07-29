@@ -2,10 +2,10 @@ const { DataTypes } = require('sequelize');
 const db = require('../db/connection');
 
 const Hotel_List=db.define('Hotel_List', {
-    idHotel_list: {
+   /*idHotel_list: {
         type: DataTypes.INTEGER,
         //primaryKey: true
-    },
+    },*/
     code: {
         type: DataTypes.STRING,
         primaryKey: true
@@ -40,6 +40,9 @@ const Hotel_List=db.define('Hotel_List', {
     direccion: {
         type: DataTypes.STRING,
     },
+    images: {
+        type: DataTypes.TEXT,
+    },
     hostSegments: {
         type: DataTypes.STRING,
     },
@@ -48,6 +51,9 @@ const Hotel_List=db.define('Hotel_List', {
     },
     services: {
         type: DataTypes.STRING,
+    },
+    rooms: {
+        type: DataTypes.TEXT,
     },
     descriptions_short: {
         type: DataTypes.STRING,
@@ -60,6 +66,9 @@ const Hotel_List=db.define('Hotel_List', {
     },
     checkoutHour: {
         type: DataTypes.STRING,
+    },
+    destinationTaxes: {
+        type: DataTypes.TEXT,
     },
     createdAt: {
         type: DataTypes.DATE,
