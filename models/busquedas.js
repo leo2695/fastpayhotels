@@ -27,6 +27,23 @@ class Busquedas {
         return numberRandom;
     }
 
+    get fechaActual() {
+        //DATE Formato ISO 8601
+        const fechaActual = new Date();
+        fechaActual.toISOString();
+
+        return fechaActual;
+    }
+
+    get fechaAnterior() {
+        //DATE Formato ISO 8601
+        const fechaAnterior = new Date();
+        fechaAnterior.setDate(fechaAnterior.getDate() - 7);
+        fechaAnterior.toISOString();
+
+        return fechaAnterior;
+    }
+
     async obtenerToken() {
 
 
@@ -64,7 +81,7 @@ class Busquedas {
 
         //let numberRandom= Math.random();
         const data = JSON.stringify({
-            "messageID": `Vamosdeviajetest-${this.numberRandom}`,
+            "messageID": `Vamosdeviaje-${this.numberRandom}`,
             "languages": [
                 "es"
             ]
@@ -77,8 +94,8 @@ class Busquedas {
                 method: 'post',
                 baseURL: 'https://catalogue.fastpayhotels.net/api/hotel/catalogue',
                 headers: {
-                    'Authorization': `Bearer FGfDDzdvXo4Q2lCXN9rQkuIKxUD4vO2Z4ENPrFiS6iYEwMZIgyx9qD9oW0CJOREWw_2qc9X9Bmr4CJTax-j-q9W9SF7FYrkG9FHPnQqEYXQVw_Lzyt2GkXtT39zA33CN8nMrP_5JkhFZXxFKUXKP9hqR-0O7j1JMi6vF4psCEl-NZ4kxeDjQQqxE8PYLWV9n1l_jSp9MjAgBt1nq_5waIE8H9pwq3o_B8LrGHjGEENiaOkKKHoJBQoYC4QRciwQarPVxtIvPhV9ROdjPsm6PMT1mOJAjzFeSi-Hwf-dJyeQMeoHrh9vXs3alIOItJCzEAkropiUbyh-pkFNJwAbLN9AI-gGRQMjAEfzr2TehlRg9tVmZDZ8yacyQ9yjrzx3ZuCRP7u4BbhD_tmhwhR0lou3mlDWnKp_TTUzz8dYEZweN1mJRc0K7WycXTwgTRjHV6HpzWcMeOmC7d0V39VBE6egMM7Crq7pjopZpn8V3R5haCJ0DdjAmNIENVfodgo6ZjwlqPvGPatLcmBKJAGj74ozg22P9MCnvycyvXC12_VvyNxBNg7e4R4_r6bREsXWLkNPUXxrGteeVDUuhOqS-L4oehow`,
-                    //'Authorization': `${token_type} ${access_token}`,
+                    //'Authorization': `Bearer FGfDDzdvXo4Q2lCXN9rQkuIKxUD4vO2Z4ENPrFiS6iYEwMZIgyx9qD9oW0CJOREWw_2qc9X9Bmr4CJTax-j-q9W9SF7FYrkG9FHPnQqEYXQVw_Lzyt2GkXtT39zA33CN8nMrP_5JkhFZXxFKUXKP9hqR-0O7j1JMi6vF4psCEl-NZ4kxeDjQQqxE8PYLWV9n1l_jSp9MjAgBt1nq_5waIE8H9pwq3o_B8LrGHjGEENiaOkKKHoJBQoYC4QRciwQarPVxtIvPhV9ROdjPsm6PMT1mOJAjzFeSi-Hwf-dJyeQMeoHrh9vXs3alIOItJCzEAkropiUbyh-pkFNJwAbLN9AI-gGRQMjAEfzr2TehlRg9tVmZDZ8yacyQ9yjrzx3ZuCRP7u4BbhD_tmhwhR0lou3mlDWnKp_TTUzz8dYEZweN1mJRc0K7WycXTwgTRjHV6HpzWcMeOmC7d0V39VBE6egMM7Crq7pjopZpn8V3R5haCJ0DdjAmNIENVfodgo6ZjwlqPvGPatLcmBKJAGj74ozg22P9MCnvycyvXC12_VvyNxBNg7e4R4_r6bREsXWLkNPUXxrGteeVDUuhOqS-L4oehow`,
+                    'Authorization': `${token_type} ${access_token}`,
                     'Content-Type': 'application/json'
                 },
                 data: data
@@ -86,7 +103,7 @@ class Busquedas {
             });
 
             const respuesta = await instancia;
-            //console.log(respuesta.data);
+            //console.log(respuesta.data.serviceGroups);
 
             const serviceTypes = respuesta.data.serviceTypes.map(element => {
                 const code = element.code;
@@ -286,7 +303,7 @@ class Busquedas {
                 //console.log(name);
                 return objetoCatalogo;
             })
-            const serviceGroups = respuesta.data.serviceGroups.map(element => {
+            const serviceGroups = (respuesta.data.serviceGroups === undefined) ? [] : respuesta.data.serviceGroups.map(element => {
                 const code = element.code;
                 let name;
                 element.captions.map(ct => {
@@ -343,19 +360,19 @@ class Busquedas {
 
         } catch (error) {
             console.log('error');
+            return [];
         }
-
-
 
     }
 
-    async obtenerListaHoteles(access_token, token_type, fechaActual) {
+    async obtenerListaHoteles(access_token, token_type) {
 
         //let numberRandom= Math.random();
         const data = JSON.stringify({
             'messageID': `Vamosdeviajetest-${this.numberRandom}`,
-            'fromLastUpdateDate': '2012-01-01T10:10:10.770Z',
-            'toLastUpdateDate': fechaActual
+            //'fromLastUpdateDate': this.fechaAnterior,
+            'fromLastUpdateDate': "2011-01-01T10:10:10.770Z",
+            'toLastUpdateDate': this.fechaActual
         });
 
         try {
@@ -365,8 +382,8 @@ class Busquedas {
                 method: 'post',
                 baseURL: 'https://catalogue.fastpayhotels.net/api/hotel/list',
                 headers: {
-                    'Authorization': `Bearer FGfDDzdvXo4Q2lCXN9rQkuIKxUD4vO2Z4ENPrFiS6iYEwMZIgyx9qD9oW0CJOREWw_2qc9X9Bmr4CJTax-j-q9W9SF7FYrkG9FHPnQqEYXQVw_Lzyt2GkXtT39zA33CN8nMrP_5JkhFZXxFKUXKP9hqR-0O7j1JMi6vF4psCEl-NZ4kxeDjQQqxE8PYLWV9n1l_jSp9MjAgBt1nq_5waIE8H9pwq3o_B8LrGHjGEENiaOkKKHoJBQoYC4QRciwQarPVxtIvPhV9ROdjPsm6PMT1mOJAjzFeSi-Hwf-dJyeQMeoHrh9vXs3alIOItJCzEAkropiUbyh-pkFNJwAbLN9AI-gGRQMjAEfzr2TehlRg9tVmZDZ8yacyQ9yjrzx3ZuCRP7u4BbhD_tmhwhR0lou3mlDWnKp_TTUzz8dYEZweN1mJRc0K7WycXTwgTRjHV6HpzWcMeOmC7d0V39VBE6egMM7Crq7pjopZpn8V3R5haCJ0DdjAmNIENVfodgo6ZjwlqPvGPatLcmBKJAGj74ozg22P9MCnvycyvXC12_VvyNxBNg7e4R4_r6bREsXWLkNPUXxrGteeVDUuhOqS-L4oehow`,
-                    //'Authorization': `${token_type} ${access_token}`,
+                    //'Authorization': `Bearer FGfDDzdvXo4Q2lCXN9rQkuIKxUD4vO2Z4ENPrFiS6iYEwMZIgyx9qD9oW0CJOREWw_2qc9X9Bmr4CJTax-j-q9W9SF7FYrkG9FHPnQqEYXQVw_Lzyt2GkXtT39zA33CN8nMrP_5JkhFZXxFKUXKP9hqR-0O7j1JMi6vF4psCEl-NZ4kxeDjQQqxE8PYLWV9n1l_jSp9MjAgBt1nq_5waIE8H9pwq3o_B8LrGHjGEENiaOkKKHoJBQoYC4QRciwQarPVxtIvPhV9ROdjPsm6PMT1mOJAjzFeSi-Hwf-dJyeQMeoHrh9vXs3alIOItJCzEAkropiUbyh-pkFNJwAbLN9AI-gGRQMjAEfzr2TehlRg9tVmZDZ8yacyQ9yjrzx3ZuCRP7u4BbhD_tmhwhR0lou3mlDWnKp_TTUzz8dYEZweN1mJRc0K7WycXTwgTRjHV6HpzWcMeOmC7d0V39VBE6egMM7Crq7pjopZpn8V3R5haCJ0DdjAmNIENVfodgo6ZjwlqPvGPatLcmBKJAGj74ozg22P9MCnvycyvXC12_VvyNxBNg7e4R4_r6bREsXWLkNPUXxrGteeVDUuhOqS-L4oehow`,
+                    'Authorization': `${token_type} ${access_token}`,
                     'Content-Type': 'application/json'
                 },
                 data: data
@@ -405,8 +422,8 @@ class Busquedas {
                 method: 'post',
                 baseURL: 'https://catalogue.fastpayhotels.net/api/hotel/details',
                 headers: {
-                    'Authorization': `Bearer FGfDDzdvXo4Q2lCXN9rQkuIKxUD4vO2Z4ENPrFiS6iYEwMZIgyx9qD9oW0CJOREWw_2qc9X9Bmr4CJTax-j-q9W9SF7FYrkG9FHPnQqEYXQVw_Lzyt2GkXtT39zA33CN8nMrP_5JkhFZXxFKUXKP9hqR-0O7j1JMi6vF4psCEl-NZ4kxeDjQQqxE8PYLWV9n1l_jSp9MjAgBt1nq_5waIE8H9pwq3o_B8LrGHjGEENiaOkKKHoJBQoYC4QRciwQarPVxtIvPhV9ROdjPsm6PMT1mOJAjzFeSi-Hwf-dJyeQMeoHrh9vXs3alIOItJCzEAkropiUbyh-pkFNJwAbLN9AI-gGRQMjAEfzr2TehlRg9tVmZDZ8yacyQ9yjrzx3ZuCRP7u4BbhD_tmhwhR0lou3mlDWnKp_TTUzz8dYEZweN1mJRc0K7WycXTwgTRjHV6HpzWcMeOmC7d0V39VBE6egMM7Crq7pjopZpn8V3R5haCJ0DdjAmNIENVfodgo6ZjwlqPvGPatLcmBKJAGj74ozg22P9MCnvycyvXC12_VvyNxBNg7e4R4_r6bREsXWLkNPUXxrGteeVDUuhOqS-L4oehow`,
-                    //'Authorization': `${token_type} ${access_token}`,
+                    //'Authorization': `Bearer FGfDDzdvXo4Q2lCXN9rQkuIKxUD4vO2Z4ENPrFiS6iYEwMZIgyx9qD9oW0CJOREWw_2qc9X9Bmr4CJTax-j-q9W9SF7FYrkG9FHPnQqEYXQVw_Lzyt2GkXtT39zA33CN8nMrP_5JkhFZXxFKUXKP9hqR-0O7j1JMi6vF4psCEl-NZ4kxeDjQQqxE8PYLWV9n1l_jSp9MjAgBt1nq_5waIE8H9pwq3o_B8LrGHjGEENiaOkKKHoJBQoYC4QRciwQarPVxtIvPhV9ROdjPsm6PMT1mOJAjzFeSi-Hwf-dJyeQMeoHrh9vXs3alIOItJCzEAkropiUbyh-pkFNJwAbLN9AI-gGRQMjAEfzr2TehlRg9tVmZDZ8yacyQ9yjrzx3ZuCRP7u4BbhD_tmhwhR0lou3mlDWnKp_TTUzz8dYEZweN1mJRc0K7WycXTwgTRjHV6HpzWcMeOmC7d0V39VBE6egMM7Crq7pjopZpn8V3R5haCJ0DdjAmNIENVfodgo6ZjwlqPvGPatLcmBKJAGj74ozg22P9MCnvycyvXC12_VvyNxBNg7e4R4_r6bREsXWLkNPUXxrGteeVDUuhOqS-L4oehow`,
+                    'Authorization': `${token_type} ${access_token}`,
                     'Content-Type': 'application/json'
                 },
                 data: data
@@ -445,7 +462,7 @@ class Busquedas {
             });
 
             mealPlans = mealPlans.map(element => {
-                const codeMP = (element.code === '' || element.code === undefined) ? element.name : element.code;
+                const codeMP = (element.code === undefined) ? element.name : element.code;
                 return codeMP
             });
 
@@ -455,27 +472,27 @@ class Busquedas {
             });
             //console.log(services);
 
-           images= images.map(element => ({
+            images = images.map(element => ({
                 //codeHotel: codeFPH,
                 code: (!element.type || element.type['code'] === undefined) ? 'S/D' : element.type['code'],
                 name: (!element.name || element.name === undefined) ? 'S/D' : element.name,
                 url: (!element.url || element.url === undefined) ? 'S/D' : element.url
             }));
-     
-           rooms= rooms.map(element =>({
-               descriptions: (!element.descriptions || element.descriptions === undefined) ? 'S/D' : element.descriptions,
-               services: (!element.services || element.services === undefined) ? 'S/D' : element.services,
-               images: (!element.images || element.images === undefined || element.images === '') ? 'S/D' : element.images,
-               code: (!element.code || element.code === undefined) ? 'S/D' : element.code,
-               name: (!element.name || element.name === undefined) ? 'S/D' : element.name
+
+            rooms = rooms.map(element => ({
+                descriptions: (!element.descriptions || element.descriptions === undefined) ? 'S/D' : element.descriptions,
+                services: (!element.services || element.services === undefined) ? 'S/D' : element.services,
+                images: (!element.images || element.images === undefined || element.images === '') ? 'S/D' : element.images,
+                code: (!element.code || element.code === undefined) ? 'S/D' : element.code,
+                name: (!element.name || element.name === undefined) ? 'S/D' : element.name
             }));
 
-           destinationTaxes= destinationTaxes.map(element =>({
-               description: (!element.description || element.description === undefined || element.description === '') ? 'S/D' : element.description,
-               amount: (!element.amount || element.amount === undefined || element.amount === '') ? 'S/D' : element.service,
-               currency: (!element.currency || element.currency === undefined || element.currency === '') ? 'S/D' : element.currency,
-               guestScope: (!element.guestScope || element.guestScope === undefined || element.guestScope === '') ? 'S/D' : element.guestScope,
-               destinationScope: (!element.destinationScope || element.destinationScope === undefined || element.destinationScope === '') ? 'S/D' : element.destinationScope
+            destinationTaxes = destinationTaxes.map(element => ({
+                description: (!element.description || element.description === undefined || element.description === '') ? 'S/D' : element.description,
+                amount: (!element.amount || element.amount === undefined || element.amount === '') ? 'S/D' : element.service,
+                currency: (!element.currency || element.currency === undefined || element.currency === '') ? 'S/D' : element.currency,
+                guestScope: (!element.guestScope || element.guestScope === undefined || element.guestScope === '') ? 'S/D' : element.guestScope,
+                destinationScope: (!element.destinationScope || element.destinationScope === undefined || element.destinationScope === '') ? 'S/D' : element.destinationScope
             }));
 
             //console.log(rooms);

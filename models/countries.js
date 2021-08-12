@@ -1,17 +1,10 @@
 const { DataTypes } = require('sequelize');
 const db = require('../db/connection');
 
-const Catalogo=db.define('Catalogo', {
-    idCatalogo: {
-        type: DataTypes.INTEGER,
-        primaryKey: true
-    },
+const countries=db.define('countries', {
     code: {
         type: DataTypes.STRING,
-        //primaryKey: true
-    },
-    idCatalogoNombre: {
-        type: DataTypes.INTEGER
+        primaryKey: true
     },
     name: {
         type: DataTypes.STRING
@@ -25,9 +18,9 @@ const Catalogo=db.define('Catalogo', {
     }
 },
 {
-    tableName: 'catalogos'
+    freezeTableName: true //para que no le agregue s al query buscando la tabla loginS en vez de login o darle directamente el nombre de la tabla tableName: 'Employees'
 }
 
 );
 
-module.exports = Catalogo;
+module.exports = countries;
